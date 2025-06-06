@@ -1,0 +1,48 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Ambiente Python
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# IDEs e editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node.js (caso use futuramente)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Arquivos temporários e backups
+*.bak
+*.tmp
+*.swp
+
+# Django
+*.sqlite3
+/staticfiles/
+media/
+db.sqlite3
+
+# Testes
+coverage/
+htmlcov/
+
+# Arquivos de ambiente
+.env
+.env.*
+
+# Outros
+*.zip
+*.tar.gz
