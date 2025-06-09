@@ -1,21 +1,34 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import ToDoList 
 
 # Render 
 
-def gravar_tarefa(request):
+def gravar_e_listar_tarefa(request):
+    # POST -> Envio de dados
+    # GET  -> Recebimento de dados
+    
+    if request.method == 'POST':
+        descricao = request.POST.get("descricao")
+        
+        # cria uma nova instancia do modelo "ToDoList - Model" , e salva no banco de dados
+        
+        nova_tarefa = ToDoList(descricao=descricao)
+        nova_tarefa.save()
+        
+        # este redirect é importante para evitar o usuário pressionar F5 e salve novamente
+        return redirect('todo')
+    
+    # Este trecho abaixo serve para listar todas tarefas
+    
+    tarefas = ToDoList.objects.all()
+    # Filtrar todas tarefas
+    
+    # Contexto, será utilizado no 'for' dentro do html
     contexto = {
-        'mostrar_print': "Print de contexto",
-        }
+        'tarefas': tarefas, 
+    }
     
     return render(request, 'to_do.html', contexto)
-    
-    
-    # if request.method == 'POST':
-    #    form = ToDoForm(request.POST, instance=tarefa)
-    #    if form.is_valid():
-    #        form.save()
-    #    else:
-    #        form = ToDoForm(instance=tarefa)
     
 
 def editar_tarefa(request):
@@ -27,4 +40,12 @@ def excluir_tarefa(request):
     
 
 def listar_tarefa(request):
-    ...
+    tarefas = ToDoList.objects.all()
+    # Filtrar todas tarefas
+    
+    # Contexto
+    contexto = {
+        'tarefas': tarefas, 
+    }
+    
+    return render(request, 'to_do.html', contexto)

@@ -10,23 +10,36 @@
 {% block content %}
 
 <body>
-  
-  <header>
-    <h1>ToDoList - Django</h1>
-  </header>
-
-  <nav>
-    <ul>
-      <li><a href="#">Início</a></li>
-      <li><a href="#">Sobre</a></li>
-      <li><a href="#">{{ mostrar_print }}</a></li>
-    </ul>
-  </nav>
-
   <main>
     <section>
-      <h2>Seção principal</h2>
-      <p>Este é o conteúdo da página.</p>
+      <h2>To do List - Django</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="descricao" maxlength='100' required/>
+        <button type="submit">Salvar</button>
+      </form>
+
+      <h2> Minhas Tarefas </h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Descricao<th>
+            <th>Status</th>
+            <th>Acoes</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for tarefa in tarefas %}
+          <tr>
+            <td>{{ tarefa.descricao }}</td>
+            <td>
+              {% if tarefa.status == False%}Não concluído{% endif %}
+              {% if tarefa.status == True%}Concluído{% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
     </section>
   </main>
 
