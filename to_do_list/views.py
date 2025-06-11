@@ -18,14 +18,27 @@ def gravar_e_listar_tarefa(request):
         # este redirect é importante para evitar o usuário pressionar F5 e salve novamente
         return redirect('todo')
     
-    # Este trecho abaixo serve para listar todas tarefas
+    ###########################################
+    # Listar todas tarefas do banco de dados  #
+    ###########################################
+    
+    ## Criar um contador, exemplo: Completas: 1 | Incompletas: 10
     
     tarefas = ToDoList.objects.all()
     # Filtrar todas tarefas
     
+    tarefas_completas = ToDoList.objects.filter(status=True).values().count()
+    # Conta quantas tarefas estão completas
+    
+    tarefas_incompletas = ToDoList.objects.filter(status=False).values().count()
+    # Conta quantas tarefas estão incompletas
+    
+    
     # Contexto, será utilizado no 'for' dentro do html
     contexto = {
-        'tarefas': tarefas, 
+        'tarefas': tarefas,
+        'tarefas_completas': tarefas_completas,
+        'tarefas_incompletas': tarefas_incompletas,
     }
     
     return render(request, 'to_do.html', contexto)
@@ -38,14 +51,3 @@ def editar_tarefa(request):
 def excluir_tarefa(request):
     ...
     
-
-def listar_tarefa(request):
-    tarefas = ToDoList.objects.all()
-    # Filtrar todas tarefas
-    
-    # Contexto
-    contexto = {
-        'tarefas': tarefas, 
-    }
-    
-    return render(request, 'to_do.html', contexto)

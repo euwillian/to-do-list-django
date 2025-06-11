@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDoList - Django</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Arquivo CSS externo (opcional) -->
+  <link rel="stylesheet" href=""> <!-- Arquivo CSS externo (opcional) -->
 </head>
 
 {% block content %}
@@ -36,10 +36,16 @@
               {% if tarefa.status == False%}Não concluído{% endif %}
               {% if tarefa.status == True%}Concluído{% endif %}
             </td>
+            <td>
+              <button type="submit">Editar</button>
+              <button type="submit">Excluir</button>
+            </td>
           </tr>
         {% endfor %}
         </tbody>
       </table>
+      <h3>Completas: {{ tarefas_completas }}</h3>
+      <h3>Incompletas: {{ tarefas_incompletas }}</h3>
     </section>
   </main>
 
