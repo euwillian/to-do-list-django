@@ -4,62 +4,141 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDoList - Django</title>
-  <link rel="stylesheet" href=""> <!-- Arquivo CSS externo (opcional) -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    main {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 40px;
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+    }
+
+    button {
+      padding: 8px 14px;
+      border-radius: 6px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+    }
+
+    a {
+      margin-right: 10px;
+      color: #5A32A3;
+      text-decoration: none;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #666;
+    }
+  </style>
 </head>
 
 {% block content %}
 
 <body>
   <main>
-    <section>
-      <h2>To do List - Django</h2>
-      <form method="POST">
-        {% csrf_token %}
-        <input type="hidden" name="id" value="{{ tarefa_edicao.id|default:'' }}">
-        <input type="text" name="descricao" maxlength='100' required value="{{ tarefa_edicao.descricao|default:'' }}"/>
-        <button type="submit">Salvar</button>
-      </form>
+    <h2>To do List - Django</h2>
 
-      <h2> Minhas Tarefas </h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Descricao<th>
-            <th>Status</th>
-            <th>Acoes</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for tarefa in tarefas %}
-          <tr>
-            <td>{{ tarefa.descricao }}</td>
-            <td>
-               {% if not tarefa.status %}Não concluído{% else %}Concluído{% endif %}
-            </td>
-            <td>
-              <!-- Link que recarrega a página passando o id da tarefa para edição -->
-              <a href="?editar={{ tarefa.id }}">Editar</a>
+    <form method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="id" value="{{ tarefa_edicao.id|default:'' }}">
+      <input type="text" name="descricao" maxlength="100" required value="{{ tarefa_edicao.descricao|default:'' }}">
+      <input type="checkbox" name="status" {% if tarefa_edicao.status %}checked{% endif %}>
+      <button type="submit">Salvar</button>
+    </form>
 
-              <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{ tarefa.id }}">
-                <input type="hidden" name="acao" value="excluir">
-                <button type="submit">Excluir</button>
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      <h3>Completas: {{ tarefas_completas }}</h3>
-      <h3>Incompletas: {{ tarefas_incompletas }}</h3>
-    </section>
+    <h2>Minhas Tarefas</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for tarefa in tarefas %}
+        <tr>
+          <td>{{ tarefa.descricao }}</td>
+          <td>
+            <input type="checkbox" {% if tarefa.status %}checked{% endif %} onclick="return false;">
+          </td>
+          <td>
+            <a href="?editar={{ tarefa.id }}">Editar</a>
+            <form method="post" style="display:inline;">
+              {% csrf_token %}
+              <input type="hidden" name="id" value="{{ tarefa.id }}">
+              <input type="hidden" name="acao" value="excluir">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Completas: {{ tarefas_completas }}</h3>
+    <h3>Incompletas: {{ tarefas_incompletas }}</h3>
+
+    <footer>
+      <p>&copy; 2025 - Willian S.</p>
+    </footer>
   </main>
-
-  <footer>
-    <p>&copy; 2025 - Willian S.</p>
-  </footer>
 </body>
 
 {% endblock %}
-
 </html>

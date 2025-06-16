@@ -11,6 +11,7 @@ def crud_tarefa(request):
     if request.method == 'POST':
         id = request.POST.get("id")
         descricao = request.POST.get("descricao")
+        status = bool(request.POST.get("status")) # True ou False
         acao = request.POST.get("acao")  # pode ser None, 'excluir', etc.
         
         if acao == 'excluir':
@@ -20,10 +21,11 @@ def crud_tarefa(request):
         elif id:  # edição
             tarefa = get_object_or_404(ToDoList, id=id)
             tarefa.descricao = descricao
+            tarefa.status = status
             tarefa.save()
 
         else:  # criação
-            nova_tarefa = ToDoList(descricao=descricao)
+            nova_tarefa = ToDoList(descricao=descricao, status=status)
             nova_tarefa.save()
 
         # este redirect é importante para evitar o usuário pressionar F5 e salvar novamente
@@ -41,7 +43,7 @@ def crud_tarefa(request):
     ## Criar um contador, exemplo: Completas: 1 | Incompletas: 10
     
     tarefas = ToDoList.objects.all()
-    # Filtrar todas tarefas
+    # Filtrar todas tarefas, para usar no template
     
     tarefas_completas = ToDoList.objects.filter(status=True).values().count()
     # Conta quantas tarefas estão completas
