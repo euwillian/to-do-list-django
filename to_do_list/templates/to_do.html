@@ -15,7 +15,8 @@
       <h2>To do List - Django</h2>
       <form method="POST">
         {% csrf_token %}
-        <input type="text" name="descricao" maxlength='100' required/>
+        <input type="hidden" name="id" value="{{ tarefa_edicao.id|default:'' }}">
+        <input type="text" name="descricao" maxlength='100' required value="{{ tarefa_edicao.descricao|default:'' }}"/>
         <button type="submit">Salvar</button>
       </form>
 
@@ -33,12 +34,17 @@
           <tr>
             <td>{{ tarefa.descricao }}</td>
             <td>
-              {% if tarefa.status == False%}Não concluído{% endif %}
-              {% if tarefa.status == True%}Concluído{% endif %}
+               {% if not tarefa.status %}Não concluído{% else %}Concluído{% endif %}
             </td>
             <td>
-              <button type="submit">Editar</button>
-              <button type="submit">Excluir</button>
+              <!-- Link que recarrega a página passando o id da tarefa para edição -->
+              <a href="?editar={{ tarefa.id }}">Editar</a>
+
+              <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ tarefa.id }}">
+                <input type="hidden" name="acao" value="excluir">
+                <button type="submit">Excluir</button>
             </td>
           </tr>
         {% endfor %}
